@@ -1,0 +1,14 @@
+<div class="main-container">
+    <div id="dropZone" (drop)="loadAreaFiles($event);"
+         (dragover)="dragOverHandler($event)">
+        <div>Trascina qui i file da analizzare...</div>
+    </div>
+    <button class="input-button" (click)="openFileInput()">
+        Carica File
+    </button>
+    <input type="file" id="fileInput" style="position: absolute; opacity: 0.0"
+           (change)="loadAreaFiles($event)">
+    <button class="input-button" routerLink="/check-delegation" [disabled]="getLoadedAreaFiles().length === 0">
+        Vai ad Analisi File
+    </button>
+</div>

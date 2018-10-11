@@ -1,0 +1,30 @@
+<img src="assets/img/excel-logo.svg" style="position: absolute; opacity: 0.0">
+<div class="main-container">
+    <div id="areaFileDropZone" (drop)="loadAreaFiles($event);"
+         (dragover)="dragOverHandler($event)">
+        <div>Trascina qui i file da analizzare...</div>
+    </div>
+    <button class="input-button" (click)="openFileInput()">
+        Carica File
+    </button>
+    <input type="file" id="fileInput" multiple style="position: absolute; opacity: 0.0"
+           (change)="loadAreaFiles($event)">
+    <button class="input-button" routerLink="/check-delegation" [disabled]="getLoadedAreaFiles().length === 0">
+        Vai ad Analisi File
+    </button>
+    <div class="loaded-files-container" *ngIf="getLoadedAreaFiles().length">
+        <div class="loaded-files-title">
+            FILE CARICATI
+        </div>
+        <div class="loaded-file" *ngFor="let areaFile of getLoadedAreaFiles()"
+             [ngClass]="{'is-loading': areaFile.isLoading}">
+            <div class="logo-container">
+                <img src="assets/img/excel-logo.svg">
+            </div>
+            <div class="file-name">
+               {{areaFile.name}}
+            </div>
+        </div>
+    </div>
+</div>
+

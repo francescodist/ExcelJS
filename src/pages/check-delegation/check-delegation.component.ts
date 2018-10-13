@@ -23,7 +23,7 @@ export class CheckDelegationComponent implements OnInit {
         return this.fileService.getLoadedTotalFile();
     }
 
-    loadAreaFiles(ev) {
+    loadTotalFile(ev) {
         // Prevent default behavior (Prevent file from being opened)
         ev.preventDefault();
         this.fileService.loadTotalFile(ev);
@@ -43,6 +43,20 @@ export class CheckDelegationComponent implements OnInit {
 
     joinData() {
         this.excelService.joinData();
+    }
+
+    deleteAreaFile(fileName) {
+        this.fileService.deleteAreaFile(fileName);
+    }
+
+    deleteAllAreaFiles() {
+        this.fileService.deleteAllAreaFiles();
+    }
+
+    deleteTotalFile () {
+        this.fileService.deleteTotalFile();
+        var fileInput = (<HTMLInputElement>document.getElementById('fileInput'));
+        fileInput.value = null;
     }
 
 }

@@ -95,4 +95,19 @@ export class FileService {
         }
 
     }
+
+    deleteAreaFile(fileName) {
+        let index = this.loadedAreaFiles.findIndex(x => x.name === fileName);
+        if(index !== -1) {
+            this.loadedAreaFiles.splice(index, 1);
+        }
+    }
+
+    deleteAllAreaFiles() {
+        this.loadedAreaFiles = [];
+    }
+
+    deleteTotalFile() {
+        this.loadedTotalFile = null;
+    }
 }

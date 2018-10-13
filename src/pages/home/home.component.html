@@ -16,15 +16,22 @@
         <div class="loaded-files-title">
             FILE CARICATI
         </div>
+
         <div class="loaded-file" *ngFor="let areaFile of getLoadedAreaFiles()"
-             [ngClass]="{'is-loading': areaFile.isLoading}">
+        [ngClass]="{'is-loading': areaFile.isLoading}" >
             <div class="logo-container">
                 <img src="assets/img/excel-logo.svg">
             </div>
             <div class="file-name">
-               {{areaFile.name}}
+                {{areaFile.name}}
             </div>
+            <button class="delete-button" (click)="deleteAreaFile(areaFile.name)">
+                Elimina
+            </button>
         </div>
+        <button class="delete-button" (click)="deleteAllAreaFiles()">
+            Elimina tutti
+        </button>
     </div>
 </div>
 

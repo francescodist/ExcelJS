@@ -38,6 +38,27 @@
 	}
 }
 
+.delete-button {
+	width: 100%;
+	background: rgb(255, 84, 113);
+	margin-bottom: 20px;
+	margin-top: 20px;
+	font-size: 20px;
+	padding: 10px;
+	border: 0;
+	border-radius: 10px;
+	outline: none;
+	&:hover {
+		cursor: pointer;
+		opacity: 0.7;
+		
+		&[disabled] {
+			opacity: 1.0;
+			cursor: unset;
+		}
+	}
+}
+
 .loaded-files-container {
 	width: 100%;
 	text-align: center;
@@ -54,6 +75,7 @@
 		width: 250px;
 		height: 50px;
 		margin: 10px 1%;
+		margin-top: 20px;
 		display: inline-block;
 		text-align: left;
 		border: 1px solid grey;

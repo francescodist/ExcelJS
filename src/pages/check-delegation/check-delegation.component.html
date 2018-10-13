@@ -11,7 +11,7 @@
         Inizia l'analisi
     </button>
     <input type="file" id="fileInput" multiple style="position: absolute; opacity: 0.0"
-           (change)="loadAreaFiles($event)">
+           (change)="loadTotalFile($event)">
     <div class="loaded-files-container" *ngIf="getLoadedTotalFile()">
         <div class="loaded-files-title">
             FILE DEI TOTALI
@@ -24,6 +24,9 @@
             <div class="file-name">
                 {{getLoadedTotalFile().name}}
             </div>
+            <button class="delete-button" (click)="deleteTotalFile()">
+                    Elimina
+            </button>
         </div>
     </div>
     <div class="loaded-files-container" *ngIf="getLoadedAreaFiles().length">
@@ -38,7 +41,13 @@
             <div class="file-name">
                {{areaFile.name}}
             </div>
+            <button class="delete-button" (click)="deleteAreaFile(areaFile.name)">
+                Elimina
+            </button>
         </div>
+        <button class="delete-button" (click)="deleteAllAreaFiles()">
+            Elimina tutti
+        </button>
     </div>
 </div>
 

@@ -37,4 +37,12 @@ export class HomeComponent implements OnInit {
         fileInput.click();
     }
 
+    deleteAreaFile(fileName) {
+        this.fileService.deleteAreaFile(fileName);
+    }
+
+    deleteAllAreaFiles() {
+        this.fileService.deleteAllAreaFiles();
+    }
+
 }

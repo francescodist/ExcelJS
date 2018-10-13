@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import * as xlsx from 'xlsx';
+import {ElectronService} from 'ngx-electron';
 
 @Injectable({
     providedIn: 'root'
@@ -10,7 +11,7 @@ export class ExcelService {
     totalData = [];
     result = {};
 
-    constructor() {
+    constructor(public electron: ElectronService) {
     }
 
     getTotalTable() {
@@ -23,19 +24,7 @@ export class ExcelService {
         console.log(wb);
         const wsname = wb.SheetNames[0];
         const ws = wb.Sheets[wsname];
-        // corrects file range to avoid excessive memory usage ////////////
-        const range = {s: {r: 20000000, c: 20000000}, e: {r: 0, c: 0}};
-        Object.keys(ws).filter(function (x) {
-            return x.charAt(0) !== '!';
-        })
-            .map(xlsx.utils.decode_cell).forEach(function (x) {
-            range.s.c = Math.min(range.s.c, x.c);
-            range.s.r = Math.min(range.s.r, x.r);
-            range.e.c = Math.max(range.e.c, x.c);
-            range.e.r = Math.max(range.e.r, x.r);
-        });
-        ws['!ref'] = xlsx.utils.encode_range(range);
-        /////////////////////////////////////////////////////////////////
+        this.correctXLSRange(ws);
         const data = <any[]> xlsx.utils.sheet_to_json(ws, {header: 1});
         console.log(data);
         return data;
@@ -104,14 +93,18 @@ export class ExcelService {
                 }
             });
         }
+        const path = this.electron.remote.dialog.showSaveDialog({title: 'Cartella Output', defaultPath: 'Nuova Cartella'});
+        this.electron.ipcRenderer.sendSync('create-folder', path);
         let sheet, wb;
         for (const delegation in this.result) {
                 sheet = {};
                 sheet[delegation] = xlsx.utils.json_to_sheet(this.result[delegation]);
+                this.correctXLSRange(sheet);
                 console.log(sheet);
                 wb = {SheetNames: [delegation], Sheets: sheet};
                 console.log(wb);
-                xlsx.writeFile(wb, delegation + '.xlsx');
+                const content = xlsx.write(wb, { type: 'binary', bookType: 'xlsx', bookSST: false });
+                this.electron.ipcRenderer.sendSync('write-file', [content, path, delegation]);
         }
         /*
         const sheet = xlsx.utils.json_to_sheet(this.result['NOELENCO']);
@@ -127,5 +120,19 @@ export class ExcelService {
             'C.F. / P.IVA': row[2],
             'TOTALE': row[0]
         };
+    }
+
+    correctXLSRange(ws) {
+        const range = {s: {r: 20000000, c: 20000000}, e: {r: 0, c: 0}};
+        Object.keys(ws).filter(function (x) {
+            return x.charAt(0) !== '!';
+        })
+            .map(xlsx.utils.decode_cell).forEach(function (x) {
+            range.s.c = Math.min(range.s.c, x.c);
+            range.s.r = Math.min(range.s.r, x.r);
+            range.e.c = Math.max(range.e.c, x.c);
+            range.e.r = Math.max(range.e.r, x.r);
+        });
+        ws['!ref'] = xlsx.utils.encode_range(range);
     }
 }

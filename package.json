@@ -4,7 +4,7 @@
   "main": "main.js",
   "scripts": {
     "ng": "ng",
-    "start": "electron .",
+    "start": "ng build && electron .",
     "build": "ng build --prod --base-href=''",
     "test": "ng test",
     "lint": "ng lint",
@@ -22,6 +22,8 @@
     "@angular/platform-browser-dynamic": "^6.0.3",
     "@angular/router": "^6.0.3",
     "core-js": "^2.5.4",
+    "mkdirp": "^0.5.1",
+    "ngx-electron": "^1.0.4",
     "rxjs": "^6.0.0",
     "xlsx": "^0.14.0",
     "zone.js": "^0.8.26"
@@ -33,7 +35,7 @@
     "@angular/language-service": "^6.0.3",
     "@types/jasmine": "~2.8.6",
     "@types/jasminewd2": "~2.0.3",
-    "@types/node": "~8.9.4",
+    "@types/node": "^8.9.5",
     "codelyzer": "~4.2.1",
     "electron": "^3.0.0",
     "jasmine-core": "~2.99.1",

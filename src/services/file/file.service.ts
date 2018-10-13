@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {ExcelService} from '../excel/excel.service';
-import {load} from '@angular/core/src/render3/instructions';
 
 @Injectable({
     providedIn: 'root'
@@ -65,7 +64,7 @@ export class FileService {
         this.loadedAreaFiles.push(file);
         const reader = new FileReader();
         reader.onload = (e: any) => {
-            this.excelService.getJsonFromExcel(e);
+            this.excelService.getParsedAreaData(e, file.name);
             file.isLoading = false;
         };
         reader.readAsBinaryString(file);
@@ -74,12 +73,14 @@ export class FileService {
     private readTotalFileAsBinaryString(file) {
         file.isLoading = true;
         this.loadedTotalFile = file;
-        const reader = new FileReader();
-        reader.onload = (e: any) => {
-            this.excelService.getTotalJsonFromExcel(e);
-            file.isLoading = false;
-        };
-        reader.readAsBinaryString(file);
+        setTimeout(() => {
+            const reader = new FileReader();
+            reader.onload = (e: any) => {
+                this.excelService.getParsedTotalData(e, file.name);
+                file.isLoading = false;
+            };
+            reader.readAsBinaryString(file);
+        }, 500);
     }
 
     private removeDragData(ev) {

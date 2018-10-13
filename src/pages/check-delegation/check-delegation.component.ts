@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FileService} from '../../services/file/file.service';
+import {ExcelService} from '../../services/excel/excel.service';
 
 @Component({
     selector: 'app-check-delegation',
@@ -8,7 +9,7 @@ import {FileService} from '../../services/file/file.service';
 })
 export class CheckDelegationComponent implements OnInit {
 
-    constructor(public fileService: FileService) {
+    constructor(public fileService: FileService, public excelService: ExcelService) {
     }
 
     ngOnInit() {
@@ -38,6 +39,10 @@ export class CheckDelegationComponent implements OnInit {
     openFileInput() {
         const fileInput = <HTMLElement> document.querySelector('#fileInput');
         fileInput.click();
+    }
+
+    joinData() {
+        this.excelService.joinData();
     }
 
 }

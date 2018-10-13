@@ -7,8 +7,25 @@
     <button class="input-button" (click)="openFileInput()">
         Carica il File dei Totali
     </button>
+    <button class="input-button" *ngIf="getLoadedTotalFile()" (click)="joinData()">
+        Inizia l'analisi
+    </button>
     <input type="file" id="fileInput" multiple style="position: absolute; opacity: 0.0"
            (change)="loadAreaFiles($event)">
+    <div class="loaded-files-container" *ngIf="getLoadedTotalFile()">
+        <div class="loaded-files-title">
+            FILE DEI TOTALI
+        </div>
+        <div class="loaded-file"
+             [ngClass]="{'is-loading': getLoadedTotalFile().isLoading}">
+            <div class="logo-container">
+                <img src="assets/img/excel-logo.svg">
+            </div>
+            <div class="file-name">
+                {{getLoadedTotalFile().name}}
+            </div>
+        </div>
+    </div>
     <div class="loaded-files-container" *ngIf="getLoadedAreaFiles().length">
         <div class="loaded-files-title">
             FILE CARICATI PRONTI PER L'ANALISI
@@ -23,22 +40,5 @@
             </div>
         </div>
     </div>
-    <div class="loaded-files-container" *ngIf="getLoadedTotalFile()">
-        <div class="loaded-files-title">
-            FILE DEI TOTALI
-        </div>
-        <div class="loaded-file"
-             [ngClass]="{'is-loading': getLoadedTotalFile().isLoading}">
-            <div class="logo-container">
-                <img src="assets/img/excel-logo.svg">
-            </div>
-            <div class="file-name">
-               {{getLoadedTotalFile().name}}
-            </div>
-        </div>
-    </div>
-    <button class="input-button" *ngIf="getLoadedTotalFile()">
-        Inizia l'analisi
-    </button>
 </div>
 

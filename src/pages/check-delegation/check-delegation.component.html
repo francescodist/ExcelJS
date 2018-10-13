@@ -1,14 +1,44 @@
+<img src="assets/img/excel-logo.svg" style="position: absolute; opacity: 0.0">
 <div class="main-container">
-    <div id="dropZone" (drop)="loadAreaFiles($event);"
+    <div  id="areaFileDropZone" (drop)="loadAreaFiles($event);"
          (dragover)="dragOverHandler($event)">
-        <div>Trascina qui i file da analizzare...</div>
+        <div>Trascina qui il file da analizzare...</div>
     </div>
     <button class="input-button" (click)="openFileInput()">
-        Carica File
+        Carica il File dei Totali
     </button>
-    <input type="file" id="fileInput" style="position: absolute; opacity: 0.0"
+    <input type="file" id="fileInput" multiple style="position: absolute; opacity: 0.0"
            (change)="loadAreaFiles($event)">
-    <button class="input-button" routerLink="/check-delegation" [disabled]="getLoadedAreaFiles().length === 0">
-        Vai ad Analisi File
+    <div class="loaded-files-container" *ngIf="getLoadedAreaFiles().length">
+        <div class="loaded-files-title">
+            FILE CARICATI PRONTI PER L'ANALISI
+        </div>
+        <div class="loaded-file" *ngFor="let areaFile of getLoadedAreaFiles()"
+             [ngClass]="{'is-loading': areaFile.isLoading}">
+            <div class="logo-container">
+                <img src="assets/img/excel-logo.svg">
+            </div>
+            <div class="file-name">
+               {{areaFile.name}}
+            </div>
+        </div>
+    </div>
+    <div class="loaded-files-container" *ngIf="getLoadedTotalFile()">
+        <div class="loaded-files-title">
+            FILE DEI TOTALI
+        </div>
+        <div class="loaded-file"
+             [ngClass]="{'is-loading': getLoadedTotalFile().isLoading}">
+            <div class="logo-container">
+                <img src="assets/img/excel-logo.svg">
+            </div>
+            <div class="file-name">
+               {{getLoadedTotalFile().name}}
+            </div>
+        </div>
+    </div>
+    <button class="input-button" *ngIf="getLoadedTotalFile()">
+        Inizia l'analisi
     </button>
 </div>
+

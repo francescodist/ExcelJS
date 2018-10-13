@@ -18,10 +18,14 @@ export class CheckDelegationComponent implements OnInit {
         return this.fileService.getLoadedAreaFiles();
     }
 
+    getLoadedTotalFile() {
+        return this.fileService.getLoadedTotalFile();
+    }
+
     loadAreaFiles(ev) {
         // Prevent default behavior (Prevent file from being opened)
         ev.preventDefault();
-        this.fileService.loadFiles(ev);
+        this.fileService.loadTotalFile(ev);
     }
 
     dragOverHandler(ev) {

@@ -8,6 +8,7 @@ import {load} from '@angular/core/src/render3/instructions';
 export class FileService {
 
     private loadedAreaFiles: any[] = [];
+    private loadedTotalFile: any;
 
     constructor(public excelService: ExcelService) {
     }
@@ -15,6 +16,11 @@ export class FileService {
     getLoadedAreaFiles() {
         return this.loadedAreaFiles;
     }
+
+    getLoadedTotalFile() {
+        return this.loadedTotalFile;
+    }
+
 
     loadFiles(loadFileEvent) {
         const loadedFiles: any[] = loadFileEvent.dataTransfer ?
@@ -35,12 +41,42 @@ export class FileService {
         this.removeDragData(loadFileEvent);
     }
 
+    loadTotalFile(loadFileEvent) {
+        const loadedFiles: any[] = loadFileEvent.dataTransfer ?
+            (loadFileEvent.dataTransfer.items ?
+                loadFileEvent.dataTransfer.items : loadFileEvent.dataTransfer.files) : loadFileEvent.target.files;
+        // Use DataTransferItemList interface to access the file(s)
+        for (let i = 0; i < loadedFiles.length; i++) {
+            // If dropped items aren't files, reject them
+            if (loadedFiles[i].kind === 'file') {
+                const file = loadedFiles[i].getAsFile();
+                this.readTotalFileAsBinaryString(file);
+            } else if (!loadFileEvent.dataTransfer) {
+                this.readTotalFileAsBinaryString(loadedFiles[i]);
+            }
+        }
+
+        // Pass event to removeDragData for cleanup
+        this.removeDragData(loadFileEvent);
+    }
+
     private readFileAsBinaryString(file) {
         file.isLoading = true;
         this.loadedAreaFiles.push(file);
         const reader = new FileReader();
         reader.onload = (e: any) => {
             this.excelService.getJsonFromExcel(e);
+            file.isLoading = false;
+        };
+        reader.readAsBinaryString(file);
+    }
+
+    private readTotalFileAsBinaryString(file) {
+        file.isLoading = true;
+        this.loadedTotalFile = file;
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+            this.excelService.getTotalJsonFromExcel(e);
             file.isLoading = false;
         };
         reader.readAsBinaryString(file);

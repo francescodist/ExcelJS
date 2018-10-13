@@ -65,4 +65,41 @@ export class ExcelService {
         }, []);
         console.log(data);
     }
+
+
+
+    getTotalJsonFromExcel(fileEvent) {
+        const bstr = fileEvent.target.result;
+        const wb = xlsx.read(bstr, {type: 'binary'});
+
+        const wsname = wb.SheetNames[0];
+        const ws = wb.Sheets[wsname];
+        // corrects file range to avoid excessive memory usage ////////////
+        const range = {s: {r: 20000000, c: 20000000}, e: {r: 0, c: 0}};
+        Object.keys(ws).filter(function (x) {
+            return x.charAt(0) !== '!';
+        })
+            .map(xlsx.utils.decode_cell).forEach(function (x) {
+            range.s.c = Math.min(range.s.c, x.c);
+            range.s.r = Math.min(range.s.r, x.r);
+            range.e.c = Math.max(range.e.c, x.c);
+            range.e.r = Math.max(range.e.r, x.r);
+        });
+        ws['!ref'] = xlsx.utils.encode_range(range);
+        /////////////////////////////////////////////////////////////////
+        let data = <any[]> xlsx.utils.sheet_to_json(ws, {header: 1});
+        
+        let parsedData = [];
+        
+        data.forEach(function(element, index){
+            if(index > 2){
+                let cf = element.slice(2,3);
+                let association = element.slice(10,11);
+                let result = cf.concat(association);
+                parsedData.push(result);
+            }
+        }); 
+
+        console.log(parsedData);
+    }
 }

@@ -8,7 +8,8 @@
     "build": "ng build --prod --base-href=''",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --prune=true --out=release-builds"
   },
   "private": true,
   "dependencies": {

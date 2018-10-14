@@ -49,12 +49,12 @@ export class ExcelService {
             return tot;
         }, []);
 
-        if(data.length !== 0){
-            this.putInTotalAreaData(fileName, data);
+        if (data.length !== 0) {
+            return this.putInTotalAreaData(fileName, data);
         } else {
             return 0;
         }
-        
+
     }
 
     getParsedTotalData(excelFile: any, fileName: string) {
@@ -62,7 +62,7 @@ export class ExcelService {
         data = data.slice(3).map(function (row) {
             return [row[2], row[10]];
         });
-        if(data.length !== 0) {
+        if (data.length !== 0) {
             this.totalData = data;
         } else {
             return 0;
@@ -75,6 +75,7 @@ export class ExcelService {
             fileName += 'b';
         }
         this.totalAreaData[fileName] = data;
+        return fileName;
     }
 
     joinData() {
@@ -97,20 +98,20 @@ export class ExcelService {
             });
         }
         const path = this.electron.remote.dialog.showSaveDialog({title: 'Cartella Output', defaultPath: 'Nuova Cartella'});
-        this.electron.ipcRenderer.sendSync('create-folder', path);
-        let sheet, wb;
-        for (const delegation in this.result) {
+        if (this.electron.ipcRenderer.sendSync('create-folder', path)) {
+            let sheet, wb;
+            for (const delegation in this.result) {
                 sheet = {};
                 sheet[delegation] = xlsx.utils.json_to_sheet(this.result[delegation]);
                 this.correctXLSRange(sheet);
                 wb = {SheetNames: [delegation], Sheets: sheet};
-                const content = xlsx.write(wb, { type: 'binary', bookType: 'xlsx', bookSST: false });
+                const content = xlsx.write(wb, {type: 'binary', bookType: 'xlsx', bookSST: false});
                 this.electron.ipcRenderer.sendSync('write-file', [content, path, delegation]);
+            }
+            this.electron.ipcRenderer.sendSync('done-loading', 'ok');
         }
-        /*
-        const sheet = xlsx.utils.json_to_sheet(this.result['NOELENCO']);
-        const wb = {SheetNames: ['NOELENCO'], Sheets: {'NOELENCO': sheet}};
-        xlsx.writeFile(wb, 'NOELENCO.xlsx');*/
+
+
     }
 
     getRowAsObject(row) {

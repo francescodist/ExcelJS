@@ -62,7 +62,7 @@
 	
 	&.delete-all {
 		margin-top: 20px;
-		position: unset; 
+		position: unset;
 		opacity: 1.0;
 	}
 }
@@ -114,6 +114,10 @@
 		
 		&.is-loading {
 			opacity: 0.3;
+		}
+		
+		&.is-double {
+			background: rgba(255, 0, 0, 0.2);
 		}
 	}
 }

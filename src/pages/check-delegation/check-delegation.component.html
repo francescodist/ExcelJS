@@ -4,13 +4,13 @@
          (dragover)="dragOverHandler($event)">
         <div>Trascina qui il file da analizzare...</div>
     </div>
-    <button class="input-button" (click)="openFileInput()">
+    <button class="input-button" [disabled]="isLoading" (click)="openFileInput()">
         Carica il File dei Totali
     </button>
-    <button class="input-button" *ngIf="getLoadedTotalFile()" (click)="joinData()">
+    <button class="input-button" [disabled]="isLoading || getLoadedTotalFile().isLoading" *ngIf="getLoadedTotalFile()" (click)="joinData()">
         Inizia l'analisi
     </button>
-    <input type="file" id="fileInput" multiple style="position: absolute; opacity: 0.0"
+    <input type="file" *ngIf="!getLoadedTotalFile()" id="fileInput" multiple style="position: absolute; opacity: 0.0"
            (change)="loadTotalFile($event)">
     <div class="loaded-files-container" *ngIf="getLoadedTotalFile()">
         <div class="loaded-files-title">
@@ -24,7 +24,7 @@
             <div class="file-name">
                 {{getLoadedTotalFile().name}}
             </div>
-            <button class="delete-button" (click)="deleteTotalFile()">
+            <button class="delete-button" [disabled]="isLoading" (click)="deleteTotalFile()">
                     Elimina
             </button>
         </div>
@@ -43,7 +43,7 @@
             </div>
         </div>
     </div>
-    <button class="back-button" (click)="backClicked()">
+    <button class="back-button" [disabled]="isLoading" (click)="backClicked()">
         Indietro
     </button>
 </div>

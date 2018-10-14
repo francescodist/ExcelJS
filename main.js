@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const fs = require('fs');
 var path = require('path');
 
@@ -53,12 +53,34 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 ipcMain.on('create-folder', (event, arg) => {
-    fs.mkdir(arg, () => {
-        event.returnValue = arg;
-    });
+    if(arg) {
+        fs.mkdir(arg, () => {
+            event.returnValue = arg;
+        });
+    } else {
+        event.returnValue = false;
+    }
 });
 
 ipcMain.on('write-file', (event, arg) => {
     fs.writeFileSync(arg[1] + "/" + arg[2] + ".xlsx", arg[0], { encoding: 'binary' });
     event.returnValue = 'ok';
+});
+
+ipcMain.on('done-loading', (event, arg) => {
+    dialog.showMessageBox({
+        message: 'Creazione file completata correttamente!',
+        buttons: ['OK']
+    });
+    event.returnValue = arg;
+});
+
+ipcMain.on('double-files', (event, arg) => {
+   dialog.showMessageBox({
+       message: 'Ci sono dei file duplicati, come si desidera procedere?',
+       buttons: ['Elimina Duplicati', 'Mantieni Duplicati', 'Annulla'],
+       defaultId: 0
+   }, response => {
+       event.returnValue = response;
+   })
 });

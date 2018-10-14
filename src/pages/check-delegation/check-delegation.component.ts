@@ -10,6 +10,8 @@ import {Location} from '@angular/common';
 })
 export class CheckDelegationComponent implements OnInit {
 
+    isLoading: boolean;
+
     constructor(public fileService: FileService, public excelService: ExcelService, private location: Location) {
     }
 
@@ -42,25 +44,14 @@ export class CheckDelegationComponent implements OnInit {
     }
 
     joinData() {
+        this.isLoading = true;
         this.excelService.joinData();
+        this.isLoading = false;
     }
 
-    deleteAreaFile(fileName) {
-        this.fileService.deleteAreaFile(fileName);
-        var fileInput = (<HTMLInputElement>document.getElementById('fileInput'));
-        fileInput.value = null;
-    }
-
-    deleteAllAreaFiles() {
-        this.fileService.deleteAllAreaFiles();
-        var fileInput = (<HTMLInputElement>document.getElementById('fileInput'));
-        fileInput.value = null;
-    }
 
     deleteTotalFile () {
         this.fileService.deleteTotalFile();
-        var fileInput = (<HTMLInputElement>document.getElementById('fileInput'));
-        fileInput.value = null;
     }
 
     backClicked() {

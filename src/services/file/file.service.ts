@@ -62,14 +62,21 @@ export class FileService {
     private readFileAsBinaryString(file) {
         file.isLoading = true;
         this.loadedAreaFiles.push(file);
+        const i = this.loadedAreaFiles.length - 1;
         const reader = new FileReader();
         reader.onload = (e: any) => {
-            if(this.excelService.getParsedAreaData(e, file.name) === 0) {
-              let index = this.loadedAreaFiles.indexOf(file);
-              if (index !== -1) this.loadedAreaFiles.splice(index, 1);
-            } 
+            const parsedAreaData = this.excelService.getParsedAreaData(e, file.name);
+            if (parsedAreaData === 0) {
+                const index = this.loadedAreaFiles.indexOf(file);
+                if (index !== -1) {
+                    this.loadedAreaFiles.splice(index, 1);
+                }
+            } else if (this.loadedAreaFiles.indexOf(file.name) !== i) {
+                file.isDouble = true;
+            }
+            file.nameId = parsedAreaData;
             file.isLoading = false;
-            
+
         };
         reader.readAsBinaryString(file);
     }
@@ -80,10 +87,10 @@ export class FileService {
         setTimeout(() => {
             const reader = new FileReader();
             reader.onload = (e: any) => {
-                if(this.excelService.getParsedTotalData(e, file.name) === 0) {
+                if (this.excelService.getParsedTotalData(e, file.name) === 0) {
                     this.loadedTotalFile = null;
-                  } 
-                  file.isLoading = false;
+                }
+                file.isLoading = false;
             };
             reader.readAsBinaryString(file);
         }, 500);
@@ -102,14 +109,13 @@ export class FileService {
 
     }
 
-    deleteAreaFile(fileName) {
-        let index = this.loadedAreaFiles.findIndex(x => x.name === fileName);
-        if(index !== -1) {
-            this.loadedAreaFiles.splice(index, 1);
-        }
-        fileName = fileName.replace(/\.[^/.]+$/, "");
-        delete this.excelService.totalAreaData[fileName];
-       }
+    deleteAreaFile(fileNameId, index) {
+        this.loadedAreaFiles.splice(index, 1);
+        console.log(fileNameId);
+        console.log(this.excelService.totalAreaData);
+        delete this.excelService.totalAreaData[fileNameId];
+        console.log(this.excelService.totalAreaData);
+    }
 
     deleteAllAreaFiles() {
         this.loadedAreaFiles = [];
@@ -117,7 +123,7 @@ export class FileService {
     }
 
     deleteTotalFile() {
-        this.loadedTotalFile = null;
-        this.excelService.totalData = null;
+        this.loadedTotalFile = undefined;
+        this.excelService.totalData = [];
     }
 }

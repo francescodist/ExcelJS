@@ -64,8 +64,12 @@ export class FileService {
         this.loadedAreaFiles.push(file);
         const reader = new FileReader();
         reader.onload = (e: any) => {
-            this.excelService.getParsedAreaData(e, file.name);
+            if(this.excelService.getParsedAreaData(e, file.name) === 0) {
+              let index = this.loadedAreaFiles.indexOf(file);
+              if (index !== -1) this.loadedAreaFiles.splice(index, 1);
+            } 
             file.isLoading = false;
+            
         };
         reader.readAsBinaryString(file);
     }
@@ -76,8 +80,10 @@ export class FileService {
         setTimeout(() => {
             const reader = new FileReader();
             reader.onload = (e: any) => {
-                this.excelService.getParsedTotalData(e, file.name);
-                file.isLoading = false;
+                if(this.excelService.getParsedTotalData(e, file.name) === 0) {
+                    this.loadedTotalFile = null;
+                  } 
+                  file.isLoading = false;
             };
             reader.readAsBinaryString(file);
         }, 500);

@@ -39,10 +39,14 @@ export class HomeComponent implements OnInit {
 
     deleteAreaFile(fileName) {
         this.fileService.deleteAreaFile(fileName);
+        var fileInput = (<HTMLInputElement>document.getElementById('fileInput'));
+        fileInput.value = null;
     }
 
     deleteAllAreaFiles() {
         this.fileService.deleteAllAreaFiles();
+        var fileInput = (<HTMLInputElement>document.getElementById('fileInput'));
+        fileInput.value = null;
     }
 
 }

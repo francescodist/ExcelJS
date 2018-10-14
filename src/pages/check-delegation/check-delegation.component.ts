@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FileService} from '../../services/file/file.service';
 import {ExcelService} from '../../services/excel/excel.service';
+import {Location} from '@angular/common';
 
 @Component({
     selector: 'app-check-delegation',
@@ -9,7 +10,7 @@ import {ExcelService} from '../../services/excel/excel.service';
 })
 export class CheckDelegationComponent implements OnInit {
 
-    constructor(public fileService: FileService, public excelService: ExcelService) {
+    constructor(public fileService: FileService, public excelService: ExcelService, private location: Location) {
     }
 
     ngOnInit() {
@@ -30,7 +31,6 @@ export class CheckDelegationComponent implements OnInit {
     }
 
     dragOverHandler(ev) {
-        console.log('File(s) in drop zone');
         // Prevent default behavior (Prevent file from being opened)
         ev.preventDefault();
     }
@@ -47,16 +47,24 @@ export class CheckDelegationComponent implements OnInit {
 
     deleteAreaFile(fileName) {
         this.fileService.deleteAreaFile(fileName);
+        var fileInput = (<HTMLInputElement>document.getElementById('fileInput'));
+        fileInput.value = null;
     }
 
     deleteAllAreaFiles() {
         this.fileService.deleteAllAreaFiles();
+        var fileInput = (<HTMLInputElement>document.getElementById('fileInput'));
+        fileInput.value = null;
     }
 
     deleteTotalFile () {
         this.fileService.deleteTotalFile();
         var fileInput = (<HTMLInputElement>document.getElementById('fileInput'));
         fileInput.value = null;
+    }
+
+    backClicked() {
+        this.location.back();
     }
 
 }

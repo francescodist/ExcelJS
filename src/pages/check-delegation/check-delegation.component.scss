@@ -59,12 +59,33 @@
 	}
 }
 
+.back-button {
+	width: 100%;
+	background: rgb(84, 152, 255);
+	margin-bottom: 20px;
+	margin-top: 20px;
+	font-size: 20px;
+	padding: 10px;
+	border: 0;
+	border-radius: 10px;
+	outline: none;
+	&:hover {
+		cursor: pointer;
+		opacity: 0.7;
+		
+		&[disabled] {
+			opacity: 1.0;
+			cursor: unset;
+		}
+	}
+}
+
 .loaded-files-container {
 	width: 100%;
 	text-align: center;
 	border-radius: 10px;
 	border: 2px solid grey;
-	margin: 5px;
+	margin-bottom: 5px;
 	padding-bottom: 20px;
 	.loaded-files-title {
 		font-size: 20px;

@@ -21,17 +21,14 @@ export class ExcelService {
     getJsonFromExcel(fileEvent) {
         const bstr = fileEvent.target.result;
         const wb = xlsx.read(bstr, {type: 'binary'});
-        console.log(wb);
         const wsname = wb.SheetNames[0];
         const ws = wb.Sheets[wsname];
         this.correctXLSRange(ws);
         const data = <any[]> xlsx.utils.sheet_to_json(ws, {header: 1});
-        console.log(data);
         return data;
     }
 
     getParsedAreaData(excelFile: any, fileName: string) {
-        console.log(excelFile);
         let data = this.getJsonFromExcel(excelFile);
         data = data.reduce((tot, row) => {
             if (row[0] && ((typeof row[0] === 'number'))) {
@@ -51,9 +48,13 @@ export class ExcelService {
             }
             return tot;
         }, []);
-        console.log(data);
 
-        this.putInTotalAreaData(fileName, data);
+        if(data.length !== 0){
+            this.putInTotalAreaData(fileName, data);
+        } else {
+            return 0;
+        }
+        
     }
 
     getParsedTotalData(excelFile: any, fileName: string) {
@@ -61,8 +62,11 @@ export class ExcelService {
         data = data.slice(3).map(function (row) {
             return [row[2], row[10]];
         });
-        console.log(data);
-        this.totalData = data;
+        if(data.length !== 0) {
+            this.totalData = data;
+        } else {
+            return 0;
+        }
     }
 
     putInTotalAreaData(fileName: string, data) {
@@ -71,7 +75,6 @@ export class ExcelService {
             fileName += 'b';
         }
         this.totalAreaData[fileName] = data;
-        console.log(this.totalAreaData);
     }
 
     joinData() {
@@ -100,9 +103,7 @@ export class ExcelService {
                 sheet = {};
                 sheet[delegation] = xlsx.utils.json_to_sheet(this.result[delegation]);
                 this.correctXLSRange(sheet);
-                console.log(sheet);
                 wb = {SheetNames: [delegation], Sheets: sheet};
-                console.log(wb);
                 const content = xlsx.write(wb, { type: 'binary', bookType: 'xlsx', bookSST: false });
                 this.electron.ipcRenderer.sendSync('write-file', [content, path, delegation]);
         }
@@ -110,7 +111,6 @@ export class ExcelService {
         const sheet = xlsx.utils.json_to_sheet(this.result['NOELENCO']);
         const wb = {SheetNames: ['NOELENCO'], Sheets: {'NOELENCO': sheet}};
         xlsx.writeFile(wb, 'NOELENCO.xlsx');*/
-        console.log(this.result);
     }
 
     getRowAsObject(row) {

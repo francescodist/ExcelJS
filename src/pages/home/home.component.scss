@@ -59,6 +59,12 @@
 			cursor: unset;
 		}
 	}
+	
+	&.delete-all {
+		margin-top: 20px;
+		position: unset; 
+		opacity: 1.0;
+	}
 }
 
 .loaded-files-container {

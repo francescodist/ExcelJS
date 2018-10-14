@@ -107,13 +107,17 @@ export class FileService {
         if(index !== -1) {
             this.loadedAreaFiles.splice(index, 1);
         }
-    }
+        fileName = fileName.replace(/\.[^/.]+$/, "");
+        delete this.excelService.totalAreaData[fileName];
+       }
 
     deleteAllAreaFiles() {
         this.loadedAreaFiles = [];
+        this.excelService.totalAreaData = {};
     }
 
     deleteTotalFile() {
         this.loadedTotalFile = null;
+        this.excelService.totalData = null;
     }
 }

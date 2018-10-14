@@ -1,5 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const fs = require('fs');
+var path = require('path');
+
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -7,13 +9,15 @@ let win
 
 function createWindow () {
     // Create the browser window.
-    win = new BrowserWindow({ width: 800, height: 600 })
+    win = new BrowserWindow({ width: 800, height: 600,
+        icon: path.join(__dirname, 'assets/icons/png/64x64.png') 
+    })
 
     // and load the index.html of the app.
     win.loadFile('dist/ExcelJS/index.html')
 
     // Open the DevTools.
-    win.webContents.openDevTools()
+    //win.webContents.openDevTools()
 
     // Emitted when the window is closed.
     win.on('closed', () => {

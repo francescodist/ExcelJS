@@ -1,4 +1,11 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+//handle setupevents as quickly as possible
+const setupEvents = require('./installers/setupEvents')
+if (setupEvents.handleSquirrelEvent()) {
+    // squirrel event handled and app will exit in 1000ms, so don't do anything else
+    return;
+}
+
+const {app, BrowserWindow, ipcMain, dialog} = require('electron');
 const fs = require('fs');
 var path = require('path');
 
@@ -7,10 +14,11 @@ var path = require('path');
 // be closed automatically when the JavaScript object is garbage collected.
 let win
 
-function createWindow () {
+function createWindow() {
     // Create the browser window.
-    win = new BrowserWindow({ width: 800, height: 600,
-        icon: path.join(__dirname, 'assets/icons/png/64x64.png') 
+    win = new BrowserWindow({
+        width: 800, height: 600,
+        icon: path.join(__dirname, 'assets/icons/png/64x64.png')
     })
 
     // and load the index.html of the app.
@@ -53,7 +61,7 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 ipcMain.on('create-folder', (event, arg) => {
-    if(arg) {
+    if (arg) {
         fs.mkdir(arg, () => {
             event.returnValue = arg;
         });
@@ -63,7 +71,7 @@ ipcMain.on('create-folder', (event, arg) => {
 });
 
 ipcMain.on('write-file', (event, arg) => {
-    fs.writeFileSync(arg[1] + "/" + arg[2] + ".xlsx", arg[0], { encoding: 'binary' });
+    fs.writeFileSync(arg[1] + "/" + arg[2] + ".xlsx", arg[0], {encoding: 'binary'});
     event.returnValue = 'ok';
 });
 
@@ -76,11 +84,11 @@ ipcMain.on('done-loading', (event, arg) => {
 });
 
 ipcMain.on('double-files', (event, arg) => {
-   dialog.showMessageBox({
-       message: 'Ci sono dei file duplicati, come si desidera procedere?',
-       buttons: ['Elimina Duplicati', 'Mantieni Duplicati', 'Annulla'],
-       defaultId: 0
-   }, response => {
-       event.returnValue = response;
-   })
+    dialog.showMessageBox({
+        message: 'Ci sono dei file duplicati, come si desidera procedere?',
+        buttons: ['Elimina Duplicati', 'Mantieni Duplicati', 'Annulla'],
+        defaultId: 0
+    }, response => {
+        event.returnValue = response;
+    })
 });

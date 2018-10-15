@@ -1,6 +1,7 @@
 {
-  "name": "excel-js",
-  "version": "0.0.0",
+  "name": "check-deleghe",
+  "version": "1.0.0",
+  "description": "Questo software si occupa di generare, per ogni associazione delegata, un file Excel contenente tutte le compagnie inadempienti iscritte ad essa",
   "main": "main.js",
   "scripts": {
     "ng": "ng",
@@ -10,7 +11,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --prune=true --out=release-builds",
-    "package-win": "electron-packager . electron-tutorial-app --overwrite --asar=true --platform=win32 --arch=ia32 --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Electron Tutorial App\""
+    "package-win": "electron-packager . check-deleghe --overwrite --asar=true --platform=win32 --arch=ia32 --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Check Deleghe\"",
+    "installer-mac": "electron-installer-dmg ./release-builds/check-deleghe-darwin-x64/check-deleghe.app check-deleghe"
   },
   "private": true,
   "dependencies": {
@@ -40,6 +42,8 @@
     "@types/node": "^8.9.5",
     "codelyzer": "~4.2.1",
     "electron": "^3.0.0",
+    "electron-installer-dmg": "^2.0.0",
+    "electron-winstaller": "^2.7.0",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~1.7.1",

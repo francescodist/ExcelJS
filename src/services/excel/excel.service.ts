@@ -35,7 +35,7 @@ export class ExcelService {
                 row[0] = 0;
                 row = row.filter(col => col != null);
                 if (row.length < 3) {
-                    row.splice(1, 0, tot[tot.length - 1][1]);
+                    row.splice(1, 0, tot[tot.length - 1]['NOME']);
                 }
                 const areaName = fileName.split('.')[0].toUpperCase();
                 row.push(areaName);
@@ -103,6 +103,13 @@ export class ExcelService {
             for (const delegation in this.result) {
                 sheet = {};
                 sheet[delegation] = xlsx.utils.json_to_sheet(this.result[delegation]);
+                const wscols = [
+                    {wch: 20},
+                    {wch: 40},
+                    {wch: 20},
+                    {wch: 10}
+                ];
+                sheet[delegation]['!cols'] = wscols;
                 this.correctXLSRange(sheet);
                 wb = {SheetNames: [delegation], Sheets: sheet};
                 const content = xlsx.write(wb, {type: 'binary', bookType: 'xlsx', bookSST: false});

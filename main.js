@@ -18,7 +18,8 @@ function createWindow() {
     // Create the browser window.
     win = new BrowserWindow({
         width: 800, height: 600,
-        icon: path.join(__dirname, 'assets/icons/png/64x64.png')
+        icon: path.join(__dirname, 'assets/icons/icon.ico'),
+        title: "Check Deleghe",
     })
 
     // and load the index.html of the app.

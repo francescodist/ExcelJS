@@ -14,11 +14,11 @@ function getInstallerConfig () {
     const outPath = path.join(rootPath, 'release-builds')
 
     return Promise.resolve({
-        appDirectory: path.join(outPath, 'check-deleghe-win32-ia32/'),
+        appDirectory: path.join(outPath, 'Check\ Deleghe-win32-ia32/'),
         authors: 'Francesco Di Stefano, Giacomo Calcara',
         noMsi: true,
         outputDirectory: path.join(outPath, 'windows-installer'),
-        exe: 'check-deleghe.exe',
+        exe: 'Check Deleghe.exe',
         setupExe: 'setup.exe',
     })
 }
